@@ -1,8 +1,9 @@
 import React, { Suspense, useState } from "react";
 import logo from './logo.svg';
 import './App.css';
+import loadable from "@loadable/component";
 
-const SplitMe = React.lazy(() => import("./SplitMe"));
+const SplitMe = loadable(() => import("./SplitMe"), {fallback: <div>Loading ...</div>});
 
 
 function App() {
@@ -10,14 +11,15 @@ function App() {
   const onClick = () => {
     setVisible(true);
   }
+  const onMouseOver = () => {
+    SplitMe.preload();
+  }
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p onClick={onClick}>Hello React.</p>
-        <Suspense fallback={<div>Loading ...</div>}>
+        <p onClick={onClick} onMouseOver={onMouseOver}>Hello React.</p>
           {visible && <SplitMe />}
-        </Suspense>
       </header>
     </div>
   );
